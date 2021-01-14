@@ -10,142 +10,156 @@
     <div id = "container"> 
         <canvas width="300px" height="100px" style="display: block; "></canvas>
     </div>
-		< script type = "module" > 
+		<script type="module">
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
-import { OrbitControls } from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js';
+import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js';
 import { GUI } from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/libs/dat.gui.module.js';
-import { GLTFLoader } from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/loaders/GLTFLoader.js';
+import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/loaders/GLTFLoader.js';
 // Instantiate a loader
-let scene,
-renderer,
-camera,
-stats;
-let man,
-skeleton,
-mixer;
-let walkAction,
-bend；let clock;
-let upperArm;
-let myAngle = 0.6;
-let settings;
-let t = 0.1;
-init();
+// 
+         let scene, renderer, camera, stats;
+        let man, skeleton, mixer;
+        let walkAction, bend;
+        let clock;
+        let upperArm;
+        let myAngle = 0.6;
+        let settings;
+        let t = 0.1;
+        init();
 
-function init() {
-    const container = document.getElementById('container');
-    const loader = new GLTFLoader();
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0xCDD3D6, 1);
-    //document.body.appendChild( renderer.domElement );
-    container.appendChild(renderer.domElement);
+        function init() {
+        const container = document.getElementById( 'container' );
+        const loader = new GLTFLoader();
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.setClearColor (0xCDD3D6, 1);
+        //document.body.appendChild( renderer.domElement );
+        container.appendChild( renderer.domElement );
 
-    const controls = new OrbitControls(camera, renderer.domElement);
+        const controls = new OrbitControls( camera, renderer.domElement );
 
-    const light = new THREE.AmbientLight(0x404040); // soft white light
-    scene.add(light);
+        const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+        scene.add( light );
 
-    const dirLight = new THREE.DirectionalLight(0xffffff);
-    dirLight.position.set( - 3, 10, 10);
-    dirLight.castShadow = true;
-    dirLight.shadow.camera.top = 2;
-    dirLight.shadow.camera.bottom = -2;
-    dirLight.shadow.camera.left = -2;
-    dirLight.shadow.camera.right = 2;
-    dirLight.shadow.camera.near = 0.1;
-    dirLight.shadow.camera.far = 40;
-    scene.add(dirLight);
+        				const dirLight = new THREE.DirectionalLight( 0xffffff );
+				dirLight.position.set( - 3, 10, 10 );
+				dirLight.castShadow = true;
+				dirLight.shadow.camera.top = 2;
+				dirLight.shadow.camera.bottom = - 2;
+				dirLight.shadow.camera.left = - 2;
+				dirLight.shadow.camera.right = 2;
+				dirLight.shadow.camera.near = 0.1;
+				dirLight.shadow.camera.far = 40;
+				scene.add( dirLight );
 
-    clock = new THREE.Clock();
+        clock = new THREE.Clock();
 
-    const geometry = new THREE.BoxGeometry(2, 3, 3);
-    const material = new THREE.MeshBasicMaterial({
-        color: 0x00ff00
-    });
-    const cube = new THREE.Mesh(geometry, material);
 
-    camera.position.set(0, 0, 8);
+	    const geometry = new THREE.BoxGeometry(2,3,3);
+     	const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		const cube = new THREE.Mesh( geometry, material );
 
-    loader.load(
-    // resource URL
-    'walk6.glb',
-    // called when the resource is loaded
-    function(gltf) {
+		    camera.position.set(0,0,8);
 
-        man = gltf.scene;
-        man.rotation.y = -Math.PI / 2;
-        scene.add(man);
-        upperArm = man.getObjectByName('upper_armL');
-        console.log(dumpObject(man).join('\n'));
-        createPanel();
-        animate();
-        function(xhr) {
 
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+			   loader.load(
+	           // resource URL
+	                 'path/walk6.glb',
+	// called when the resource is loaded
+	           function ( gltf ) {
 
-        },
-        // called when loading has errors
-        function(error) {
+	           //scene.add( gltf.scene );
 
-            console.log('An error happened');
+               man = gltf.scene;
+               man.rotation.y = -Math.PI/2;      
+               scene.add(man); 
+               upperArm = man.getObjectByName('upper_armL');
+               console.log(dumpObject(man).join('\n'));
 
-        });
-    }
+             // skeleton = new THREE.SkeletonHelper( man );
+             // skeleton.visible = false;
+              // scene.add( skeleton );
+              createPanel();
 
-    function createPanel() {
-        const panel = new GUI({
-            width: 310
-        });
-        const folder5 = panel.addFolder('Angles');
 
-        settings = {
-            'modify angle weight': 0.6,
-        }
-        console.log('gui');
-        folder5.add(settings, 'modify angle weight', 0.6, 2.5, 0.02).listen().onChange(function(weight) {
+               // const animations = gltf.animations;
 
-            //setWeight( weight );
-            myAngle = weight;
+              // mixer = new THREE.AnimationMixer( man );
+              // window.addEventListener('click', onDoubleClick, false);
+              // mixer.timeScale = t;
+             //  walkAction = mixer.clipAction (animations[1]);
+             //  walkAction.play();
+              // window.addEventListener('click', onDoubleClick, false);
 
-        });
+               animate();
+              // walkActin.play();
+       	//gltf.scene.children[0].scale.set (scale,scale,scale);
+	            },
+	// called while loading is progressing
+	            function ( xhr ) {
+ 
+		         console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
 
-        folder5.open();
+	              },
+	// called when loading has errors
+	             function ( error ) {
 
-    }
-	
-    function dumpObject(obj, lines = [], isLast = true, prefix = '') {
-        const localPrefix = isLast ? '└─': '├─';
-        lines.push(`$ {
-            prefix
-        }
-        $ {
-            prefix ? localPrefix: ''
-        }
-        $ {
-            obj.name || '*no-name*'
-        } [$ {
-            obj.type
-        }]`);
-        const newPrefix = prefix + (isLast ? '  ': '│ ');
-        const lastNdx = obj.children.length - 1;
-        obj.children.forEach((child, ndx) = >{
-            const isLast = ndx === lastNdx;
-            dumpObject(child, lines, isLast, newPrefix);
-        });
-        return lines;
-    }
+		         console.log( 'An error happened' );
 
-    function animate() {
-        requestAnimationFrame(animate);
+	             }
+                  );
+              }
 
-        let mixerUpdateDelta = clock.getDelta();
-        upperArm.rotation.x = myAngle;
-        renderer.render(scene, camera);
-    };
+         function createPanel() {
+                const panel = new GUI( { width: 310 } );
+                const folder5 = panel.addFolder( 'Angles' );
 
-    < /script>
+                settings = {
+                             'modify angle weight': 0.6,
+                }
+               console.log('gui');
+                   folder5.add( settings, 'modify angle weight', 0.6, 2.5, 0.02 ).listen().onChange( function ( weight ) {
+
+                        //setWeight( weight );
+                        myAngle = weight;
+
+
+                    } );
+
+                   folder5.open();
+
+         }
+
+                     
+                  // scene.add(cube);
+          function dumpObject(obj, lines = [], isLast = true, prefix = '') {
+                  const localPrefix = isLast ? '└─' : '├─';
+                  lines.push(`${prefix}${prefix ? localPrefix : ''}${obj.name || '*no-name*'} [${obj.type}]`);
+                  const newPrefix = prefix + (isLast ? '  ' : '│ ');
+                  const lastNdx = obj.children.length - 1;
+                  obj.children.forEach((child, ndx) => {
+                  const isLast = ndx === lastNdx;
+                  dumpObject(child, lines, isLast, newPrefix);
+                    });
+                      return lines;
+                }
+
+			    function animate() {
+				requestAnimationFrame( animate );
+
+				// cube.body.rotation.x += 0.1;
+				 //man.rotation.y += 0.01;
+				 let mixerUpdateDelta = clock.getDelta();
+				// mixer.update( mixerUpdateDelta );
+           upperArm.rotation.x = myAngle;
+				renderer.render( scene, camera );
+			   };
+
+              //animate();
+
+		</script>
 	
 	</body>
 </html>
