@@ -35,7 +35,6 @@ import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/thre
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.setClearColor (0xCDD3D6, 1);
-        //document.body.appendChild( renderer.domElement );
         container.appendChild( renderer.domElement );
 
         const controls = new OrbitControls( camera, renderer.domElement );
@@ -43,7 +42,7 @@ import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/thre
         const light = new THREE.AmbientLight( 0x404040 ); // soft white light
         scene.add( light );
 
-        				const dirLight = new THREE.DirectionalLight( 0xffffff );
+        			const dirLight = new THREE.DirectionalLight( 0xffffff );
 				dirLight.position.set( - 3, 10, 10 );
 				dirLight.castShadow = true;
 				dirLight.shadow.camera.top = 2;
@@ -57,9 +56,9 @@ import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/thre
         clock = new THREE.Clock();
 
 
-	    const geometry = new THREE.BoxGeometry(2,3,3);
+        const geometry = new THREE.BoxGeometry(2,3,3);
      	const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-		const cube = new THREE.Mesh( geometry, material );
+        const cube = new THREE.Mesh( geometry, material );
 
 		    camera.position.set(0,0,8);
 
@@ -69,41 +68,20 @@ import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/thre
 	                 'path/walk6.glb',
 	// called when the resource is loaded
 	           function ( gltf ) {
-
-	           //scene.add( gltf.scene );
-
                man = gltf.scene;
                man.rotation.y = -Math.PI/2;      
                scene.add(man); 
                upperArm = man.getObjectByName('upper_armL');
                console.log(dumpObject(man).join('\n'));
-
-             // skeleton = new THREE.SkeletonHelper( man );
-             // skeleton.visible = false;
-              // scene.add( skeleton );
-              createPanel();
-
-
-               // const animations = gltf.animations;
-
-              // mixer = new THREE.AnimationMixer( man );
-              // window.addEventListener('click', onDoubleClick, false);
-              // mixer.timeScale = t;
-             //  walkAction = mixer.clipAction (animations[1]);
-             //  walkAction.play();
-              // window.addEventListener('click', onDoubleClick, false);
-
+               createPanel();
                animate();
-              // walkActin.play();
-       	//gltf.scene.children[0].scale.set (scale,scale,scale);
-	            },
-	// called while loading is progressing
+
 	            function ( xhr ) {
  
 		         console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
 
 	              },
-	// called when loading has errors
+	              // called when loading has errors
 	             function ( error ) {
 
 		         console.log( 'An error happened' );
@@ -132,8 +110,6 @@ import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/thre
 
          }
 
-                     
-                  // scene.add(cube);
           function dumpObject(obj, lines = [], isLast = true, prefix = '') {
                   const localPrefix = isLast ? '└─' : '├─';
                   lines.push(`${prefix}${prefix ? localPrefix : ''}${obj.name || '*no-name*'} [${obj.type}]`);
